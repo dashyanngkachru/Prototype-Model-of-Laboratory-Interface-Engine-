@@ -1,0 +1,1130 @@
+Public Class Form1
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
+
+    End Sub
+
+    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+
+    End Sub
+
+    Private Sub Label1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label1.Click
+
+    End Sub
+
+    Private Sub Label2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label2.Click
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        Me.Close()
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+
+        'Setting username and password
+        'if correct next form else access denied messagebox shown
+        If TextBox1.Text = "interface" And TextBox2.Text = "ssd" Then
+
+            MsgBox("Login Successfull", MsgBoxStyle.OkOnly, "Welcome")
+            Form2.Show()
+
+        Else
+
+            MsgBox("Sorry,username or password not found", MsgBoxStyle.OkOnly, "Access Denied")
+
+        End If
+
+    End Sub
+
+End Class
+
+
+Imports System.IO
+Public Class Form2
+
+    Public Property MSH As String
+    Public Property PID As String
+    Public Property PV1 As String
+    Public Property ORC As String
+    Public Property OBR As String
+    Public Property MSH1 As String
+    Public Property PID1 As String
+    Public Property PV11 As String
+    Public Property ORC1 As String
+    Public Property OBR1 As String
+    Dim a As String
+    Dim b As String
+    Dim maplines(0 To 1) As String
+    Dim tplines(0 To 1) As String
+    Dim tplines1(0 To 1) As String
+    Dim segname(0 To 1) As String
+    Dim source(0 To 1) As String
+    Dim destination(0 To 1) As String
+    Dim output(0 To 1) As String
+    Dim ctrl As Integer
+    Dim atrl As Integer
+    Dim tfile As String
+    Dim afile As String
+    Dim reader As IO.StreamReader()
+
+    Private Sub Form2_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
+
+    End Sub
+
+    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        'Open Template 
+        OpenFileDialog1.ShowDialog()
+        a = OpenFileDialog1.FileName
+
+    End Sub
+
+    Private Sub OpenFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+
+        'Reading number of lines and putting the opened template file in textbox
+        Dim reader As New IO.StreamReader(OpenFileDialog1.FileName)
+        ctrl = 0
+
+        While reader.Peek() <> -1
+
+            tplines(ctrl) = reader.ReadLine()
+            ReDim Preserve tplines(0 To (UBound(tplines) + 1))
+            tfile = tfile + tplines(ctrl) + vbNewLine
+            ctrl = ctrl + 1
+
+        End While
+
+        reader.Close()
+        TextBox1.Text = tfile
+        MsgBox(ctrl)
+        MSH = tplines(0)
+        PID = tplines(1)
+        PV1 = tplines(2)
+        ORC = tplines(3)
+        OBR = tplines(4)
+
+    End Sub
+
+    Private Sub OpenFileDialog2_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
+
+        'Reading number of lines and putting the opened mapping file in textbox
+        Dim reader As New IO.StreamReader(OpenFileDialog2.FileName)
+        atrl = 0
+
+        While reader.Peek() <> -1
+
+            tplines1(atrl) = reader.ReadLine()
+            ReDim Preserve tplines1(0 To (UBound(tplines1) + 1))
+            afile = afile + tplines1(atrl) + vbNewLine
+            atrl = atrl + 1
+
+        End While
+
+        reader.Close()
+        TextBox2.Text = afile
+        MsgBox(atrl)
+        MSH1 = tplines1(0)
+        PID1 = tplines1(1)
+        PV11 = tplines1(2)
+        ORC1 = tplines1(3)
+        OBR1 = tplines1(4)
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+
+        'Opening Mapping
+        OpenFileDialog2.ShowDialog()
+        b = OpenFileDialog2.FileName
+
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+
+        'Next Form
+        Form3.Show()
+
+    End Sub
+
+End Class
+
+
+Public Class Form3
+    Dim MSHt As String
+    Dim PIDt As String
+    Dim PV1t As String
+    Dim ORCt As String
+    Dim OBRt As String
+    Dim OBRm As String
+    Dim PIDm As String
+    Dim PV1m As String
+    Dim ORCm As String
+    Dim MSHm As String
+    Dim adocon As New ADODB.Connection()
+    Dim adors As New ADODB.Recordset()
+    Dim adors1 As New ADODB.Recordset()
+    Dim adors2 As New ADODB.Recordset()
+    Dim adors3 As New ADODB.Recordset()
+    Dim adors4 As New ADODB.Recordset()
+    Dim adors5 As New ADODB.Recordset()
+    Dim adors6 As New ADODB.Recordset()
+    Dim DateTime As String
+    Dim PV1sequ(0 To 20) As String
+    Dim u As Integer = 0
+    Dim PIDseg As String = ""
+    Dim PIDse(0 To 20) As String
+    Dim t As Integer = 0
+    Dim seg As String = ""
+    Dim OBRs(0 To 20) As String
+    Dim pvchar = ""
+    Dim crchar = ""
+    Dim ntchar = ""
+    Dim j As Integer = 0
+    Dim PIDsequ(0 To 20) As String
+    Dim v As Integer = 0
+    Dim PV1seg As String = ""
+    Dim PV1seq(0 To 20) As String
+    Dim l As Integer = 0
+    Dim OBRseq(0 To 20) As String
+
+    Private Sub Panel1_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
+
+    Private Sub Panel2_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Panel2.Paint
+
+    End Sub
+
+    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+
+    End Sub
+
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
+
+    End Sub
+
+    Private Sub TextBox3_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox3.TextChanged
+
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub ComboBox3_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox3.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub ComboBox4_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox4.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub ComboBox5_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox5.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub ComboBox6_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox6.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub ComboBox7_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox7.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub ComboBox8_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox8.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub Form3_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        'Selected Template
+        TextBox2.Text = Form2.TextBox1.Text
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+
+        'Selected Mapping
+        TextBox1.Text = Form2.TextBox2.Text
+
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+
+        'Segregation of Template and putting segments into respective Comboboxes
+        MSHt = Form2.MSH
+        PIDt = Form2.PID
+        PV1t = Form2.PV1
+        ORCt = Form2.ORC
+        OBRt = Form2.OBR
+
+        Dim x As Integer = PV1t.Length
+
+        Dim myArray(x) As String
+        Dim prevchar = ""
+        Dim currchar = ""
+        Dim nextchar = ""
+        Dim count As Integer = 0
+
+        For Each chr As Char In PV1t
+
+            myArray(v) = chr
+
+            If chr = "|" Then
+
+                If prevchar = "*" And currchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                prevchar = ""
+                currchar = ""
+
+            ElseIf prevchar = "*" And currchar = "*" Then
+
+                PV1seq(count) = PV1seq(count) + myArray(v)
+
+            End If
+
+            If chr = "*" Then
+
+                If prevchar = "*" Then
+
+                    currchar = "*"
+
+                End If
+
+                prevchar = "*"
+
+            End If
+            v += 1
+
+        Next
+        v = 0
+
+        While v < count
+
+            ComboBox2.Items.Add(PV1seq(v))
+            v = v + 1
+
+        End While
+
+        Dim z As Integer = ORCt.Length
+
+        Dim myAay(z) As String
+        Dim k As Integer = 0
+        Dim ORCseg As String = ""
+        Dim ORCseq(0 To 20) As String
+        Dim prechar = ""
+        Dim crrchar = ""
+        Dim netchar = ""
+        count = 0
+
+        For Each chr As Char In ORCt
+
+            myArray(k) = chr
+
+            If chr = "|" Then
+
+                If prechar = "*" And crrchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                prechar = ""
+                crrchar = ""
+
+            ElseIf prechar = "*" And crrchar = "*" Then
+
+                ORCseq(count) = ORCseq(count) + myArray(k)
+
+            End If
+
+            If chr = "*" Then
+
+                If prechar = "*" Then
+
+                    crrchar = "*"
+
+                End If
+
+                prechar = "*"
+
+            End If
+            k += 1
+            
+        Next
+        k = 0
+
+        While k <= count
+
+            ComboBox3.Items.Add(ORCseq(k))
+            k = k + 1
+
+        End While
+
+        Dim y As Integer = PIDt.Length
+
+        Dim myAray(y) As String
+        Dim PIDseg As String = ""
+        Dim prvchar = ""
+        Dim curchar = ""
+        Dim nxtchar = ""
+        count = 0
+
+        For Each chr As Char In PIDt
+
+            myArray(j) = chr
+
+            If chr = "|" Then
+
+                If prvchar = "*" And curchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                prvchar = ""
+                curchar = ""
+
+            ElseIf prvchar = "*" And curchar = "*" Then
+
+                PIDsequ(count) = PIDsequ(count) + myArray(j)
+
+            End If
+
+            If chr = "*" Then
+
+                If prvchar = "*" Then
+
+                    curchar = "*"
+
+                End If
+
+                prvchar = "*"
+
+            End If
+            j += 1
+
+        Next
+        j = 0
+
+        While j < count
+
+            ComboBox1.Items.Add(PIDsequ(j))
+            j = j + 1
+
+        End While
+
+        Dim d As Integer = OBRt.Length
+
+        Dim mArray(d) As String
+        Dim pvchar = ""
+        Dim crchar = ""
+        Dim ntchar = ""
+        count = 0
+
+        For Each chr As Char In OBRt
+
+            myArray(l) = chr
+
+            If chr = "|" Then
+
+                If pvchar = "*" And crchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                pvchar = ""
+                crchar = ""
+
+            ElseIf pvchar = "*" And crchar = "*" Then
+
+                OBRseq(count) = OBRseq(count) + myArray(l)
+
+            End If
+
+            If chr = "*" Then
+
+                If pvchar = "*" Then
+
+                    crchar = "*"
+
+                End If
+
+                pvchar = "*"
+
+            End If
+            l += 1
+
+        Next
+        l = 0
+
+        While l <= count
+
+            ComboBox4.Items.Add(OBRseq(l))
+            l = l + 1
+
+        End While
+
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+
+        'Segregation of Mapping and putting segments into respective Comboboxes
+        MSHm = Form2.MSH1
+        PIDm = Form2.PID1
+        PV1m = Form2.PV11
+        ORCm = Form2.ORC1
+        OBRm = Form2.OBR1
+        
+        Dim x As Integer = PV1m.Length
+
+        Dim myArray(x) As String
+        Dim i As Integer = 0
+        Dim PV1seg As String = ""
+        Dim prevchar = ""
+        Dim currchar = ""
+        Dim nextchar = ""
+        Dim count As Integer = 0
+
+        For Each chr As Char In PV1m
+
+            myArray(i) = chr
+
+            If chr = "|" Then
+
+                If prevchar = "*" And currchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                prevchar = ""
+                currchar = ""
+
+            ElseIf prevchar = "*" And currchar = "*" Then
+
+                PV1sequ(count) = PV1sequ(count) + myArray(i)
+
+            End If
+
+            If chr = "*" Then
+
+                If prevchar = "*" Then
+
+                    currchar = "*"
+
+                End If
+
+                prevchar = "*"
+
+            End If
+            i += 1
+
+        Next
+        i = 0
+
+        While i < count
+
+            ComboBox6.Items.Add(PV1sequ(i))
+            i = i + 1
+
+        End While
+
+        Dim z As Integer = ORCm.Length
+
+        Dim myAay(z) As String
+        Dim k As Integer = 0
+        Dim ORCseg As String = ""
+        Dim ORCseq(0 To 20) As String
+        Dim prechar = ""
+        Dim crrchar = ""
+        Dim netchar = ""
+        count = 0
+
+        For Each chr As Char In ORCm
+
+            myArray(k) = chr
+
+            If chr = "|" Then
+
+                If prechar = "*" And crrchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                prechar = ""
+                crrchar = ""
+
+            ElseIf prechar = "*" And crrchar = "*" Then
+
+                ORCseq(count) = ORCseq(count) + myArray(k)
+
+            End If
+
+            If chr = "*" Then
+
+                If prechar = "*" Then
+
+                    crrchar = "*"
+
+                End If
+
+                prechar = "*"
+
+            End If
+            k += 1
+
+        Next
+        k = 0
+
+        While k <= count
+
+            ComboBox7.Items.Add(ORCseq(k))
+            k = k + 1
+
+        End While
+
+        Dim y As Integer = PIDm.Length
+
+        Dim myAray(y) As String
+        Dim prvchar = ""
+        Dim curchar = ""
+        Dim nxtchar = ""
+        count = 0
+
+        For Each chr As Char In PIDm
+
+            myArray(u) = chr
+
+            If chr = "|" Then
+
+                If prvchar = "*" And curchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                prvchar = ""
+                curchar = ""
+
+            ElseIf prvchar = "*" And curchar = "*" Then
+
+                PIDse(count) = PIDse(count) + myArray(u)
+
+            End If
+
+            If chr = "*" Then
+
+                If prvchar = "*" Then
+
+                    curchar = "*"
+
+                End If
+
+                prvchar = "*"
+
+            End If
+            u += 1
+
+        Next
+        u = 0
+
+        While u < count
+
+            ComboBox5.Items.Add(PIDse(u))
+            u = u + 1
+
+        End While
+
+        Dim d As Integer = OBRm.Length
+        Dim mArray(d) As String
+        count = 0
+
+        For Each chr As Char In OBRm
+
+            myArray(t) = chr
+
+            If chr = "|" Then
+
+                If pvchar = "*" And crchar = "*" Then
+
+                    count += 1
+
+                End If
+
+                pvchar = ""
+                crchar = ""
+
+            ElseIf pvchar = "*" And crchar = "*" Then
+
+                OBRs(count) = OBRs(count) + myArray(t)
+
+            End If
+
+            If chr = "*" Then
+
+                If pvchar = "*" Then
+
+                    crchar = "*"
+
+                End If
+
+                pvchar = "*"
+
+            End If
+            t += 1
+            
+        Next
+        t = 0
+
+        While t <= count
+
+            ComboBox8.Items.Add(OBRs(t))
+            t = t + 1
+
+        End While
+        
+    End Sub
+
+    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+
+        'Generating Flat file
+        MSHm = Form2.MSH1
+        PIDm = Form2.PID1
+        PV1m = Form2.PV11
+        ORCm = Form2.ORC1
+        OBRm = Form2.OBR1
+
+        'Establishing connection
+        With adocon
+
+            .Provider = "Microsoft.ACE.OLEDB.12.0"
+            .ConnectionString = "Data source= C:\Users\admin\Desktop\New folder\database1.accdb "
+            .Open()
+
+        End With
+
+        'Establishing recordsets 
+        With adors
+
+            .ActiveConnection = adocon
+            .CursorType = ADODB.CursorTypeEnum.adOpenKeyset
+            .LockType = ADODB.LockTypeEnum.adLockOptimistic
+            .Open("select * from LABORDER where Flag =0")
+
+        End With
+
+        Dim id As Integer
+        Dim test As Integer
+
+        'Do until end of file while flag = 0 for respective entry
+        Do While Not adors.EOF
+
+            Dim v As Integer = MSHm.Length
+
+            Dim my(v) As String
+
+            Dim h As Integer = 0
+            Dim MSHseg(0 To 20) As String
+            Dim MSHout(0 To 20) As String
+            Dim MSHo As String
+            Dim pr = ""
+            Dim cr = ""
+            Dim nr = ""
+            Dim counter As Integer = 0
+            MSHo = ""
+
+            'Getting DateTime from MSH for later use in ORC and OBR segments
+            For Each chr As Char In MSHm
+
+                If chr = "|" Then
+
+                    h += 1
+
+                End If
+
+                If h = 6 And chr <> "|" Then
+
+                    MSHo = MSHo + chr
+                    DateTime = MSHo
+
+                End If
+
+            Next
+
+            'Getting patientid from laborder table
+            id = adors(0).Value
+
+            Dim a As String
+            a = ""
+
+            'For getting the Table Name from segregated segment(TableName.ColumnName)
+            For Each chr As Char In PIDse(0)
+
+                If chr <> "." Then
+
+                    a = a & chr
+
+                ElseIf chr = "." Then
+
+                    Exit For
+
+                End If
+
+            Next
+
+            With adors1
+
+                .ActiveConnection = adocon
+                .CursorType = ADODB.CursorTypeEnum.adOpenKeyset
+                .LockType = ADODB.LockTypeEnum.adLockOptimistic
+                .Open("select * from " + a + " where PatientID =" & id)
+
+            End With
+
+            Dim x As Integer = PIDm.Length
+
+            Dim myArray(x) As String
+
+            Dim i As Integer = 0
+            Dim PIDseg(0 To 20) As String
+            Dim PIDout(0 To 20) As String
+            Dim PIDo As String
+            Dim prevchar = ""
+            Dim currchar = ""
+            Dim nextchar = ""
+            Dim count As Integer = 0
+            PIDo = ""
+
+            For Each chr As Char In PIDm
+
+                If chr <> "*" And prevchar = "" Then
+
+                    PIDo = PIDo & chr
+                    i += 1
+
+                ElseIf chr = "*" And prevchar = "" Then
+
+                    prevchar = "*"
+
+                ElseIf prevchar = "*" And chr = "*" Then
+
+                    'Putting value from the repective table and column of the database in the segregated segments
+                    count += 1
+                    PIDo = PIDo & adors1(count - 1).Value
+
+                End If
+
+                If prevchar = "*" And chr = "|" Then
+
+                    PIDo = PIDo & chr
+                    prevchar = ""
+                    i += 1
+
+                End If
+
+            Next
+            'Dsiplaying PID sequence 
+            MsgBox(PIDo)
+
+            'for getting patient visit details of a patient using current patientid under consideration from laborder
+            Dim PAT As Integer
+            PAT = id
+
+            Dim pa As String
+            pa = ""
+            For Each chr As Char In PV1sequ(0)
+                If chr <> "D" And chr <> "." Then
+                    pa = pa & chr
+                ElseIf chr = "." Then
+                    Exit For
+                End If
+            Next
+
+            With adors2
+
+                .ActiveConnection = adocon
+                .CursorType = ADODB.CursorTypeEnum.adOpenKeyset
+                .LockType = ADODB.LockTypeEnum.adLockOptimistic
+                .Open("select * from " + pa + " where ID =" & PAT)
+
+            End With
+
+            'Getting value of doctorid from laborder table
+            Dim DCT As Integer
+            DCT = adors(1).Value
+          
+            With adors3
+
+                .ActiveConnection = adocon
+                .CursorType = ADODB.CursorTypeEnum.adOpenKeyset
+                .LockType = ADODB.LockTypeEnum.adLockOptimistic
+                .Open("select * from DOCTOR where DoctorID=" & DCT)
+
+            End With
+            
+            Dim y As Integer = PV1m.Length
+
+            Dim myAray(y) As String
+
+            Dim j As Integer = 0
+            Dim PV1seg(0 To 20) As String
+            Dim PV1out(0 To 20) As String
+            Dim PV1o As String
+            Dim prvchar = ""
+            Dim curchar = ""
+            Dim nxtchar = ""
+            Dim cont As Integer = 0
+            PV1o = ""
+
+            For Each chr As Char In PV1m
+
+                If chr <> "*" And prvchar = "" Then
+
+                    PV1o = PV1o & chr
+                    j += 1
+
+                ElseIf chr = "*" And prvchar = "" Then
+
+                    prvchar = "*"
+
+                ElseIf prvchar = "*" And chr = "*" Then
+
+                    'getting values from PatVisit table
+                    cont += 1
+                    PV1o = PV1o & adors2(cont).Value
+
+                    If cont = 3 Then
+
+                        'for apprehending the doctor id with the doctor name
+                        PV1o = PV1o & "^" & adors3(1).Value
+
+                    End If
+
+                End If
+
+                If prvchar = "*" And chr = "|" Then
+
+                    PV1o = PV1o & chr
+                    prvchar = ""
+                    j += 1
+
+                End If
+
+            Next
+            MsgBox(PV1o)
+           
+            Dim z As Integer = ORCm.Length
+
+            Dim mArray(z) As String
+
+            Dim k As Integer = 0
+            Dim ORCseg(0 To 20) As String
+            Dim ORCout(0 To 20) As String
+            Dim ORCo As String
+            Dim pevchar = ""
+            Dim crrchar = ""
+            Dim netchar = ""
+            Dim cnt As Integer = 0
+            ORCo = ""
+
+            For Each chr As Char In ORCm
+
+                If chr <> "*" And pevchar = "" Then
+
+                    ORCo = ORCo & chr
+                    k += 1
+
+                ElseIf chr = "*" And pevchar = "" Then
+
+                    pevchar = "*"
+
+                ElseIf pevchar = "*" And chr = "*" Then
+
+                    cnt += 1
+
+                    If cnt = 1 Then
+
+                        ORCo = ORCo & "NW"
+
+                    End If
+
+                    If cnt = 2 Then
+
+                        'using the value of DateTime got from MSH 
+                        ORCo = ORCo & DateTime
+
+                    End If
+
+                End If
+
+                If pevchar = "*" And chr = "|" Then
+
+                    ORCo = ORCo & chr
+                    pevchar = ""
+                    k += 1
+
+                End If
+
+            Next
+            MsgBox(ORCo)
+
+            'getting the test id from laborder for current patient
+            test = PAT
+            test = adors(2).Value
+
+            With adors4
+
+                .ActiveConnection = adocon
+                .CursorType = ADODB.CursorTypeEnum.adOpenKeyset
+                .LockType = ADODB.LockTypeEnum.adLockOptimistic
+                .Open("select * from TEST where TestID =" & test)
+
+            End With
+
+            Dim w As Integer = OBRm.Length
+
+            Dim mAray(w) As String
+
+            Dim l As Integer = 0
+            Dim OBRseg(0 To 20) As String
+            Dim OBRout(0 To 20) As String
+            Dim OBRo As String
+            Dim pchar = ""
+            Dim crchar = ""
+            Dim ntchar = ""
+            Dim ct As Integer = 0
+            Dim c As Integer = 0
+            OBRo = ""
+
+            For Each chr As Char In OBRm
+
+                If chr <> "*" And pchar = "" Then
+
+                    OBRo = OBRo & chr
+                    l += 1
+
+                ElseIf chr = "*" And pchar = "" Then
+
+                    pchar = "*"
+
+                ElseIf pchar = "*" And chr = "*" Then
+
+                    ct += 1
+
+                    If ct = 1 Then
+
+                        OBRo = OBRo & "1"
+
+                    End If
+
+                    If ct = 3 Then
+
+                        'apprehending the test id with the test name for current patient under consideration
+                        OBRo = OBRo & adors4(c).Value
+                        c += 1
+                        OBRo = OBRo & "^" & adors4(c).Value
+
+                    End If
+
+                    If ct = 2 Then
+
+                        'getting value of DateTime got from MSH
+                        OBRo = OBRo & DateTime
+
+                    End If
+
+                    If ct = 4 Then
+
+                        'getting value of DateTime got from MSH
+                        OBRo = OBRo & DateTime
+
+                    End If
+
+                End If
+
+                If pchar = "*" And chr = "|" Then
+
+                    OBRo = OBRo & chr
+                    pchar = ""
+                    l += 1
+
+                End If
+
+            Next
+            MsgBox(OBRo)
+
+            'for displaying the repective flat file in textbox
+            TextBox3.Text = MSHm & " " & vbNewLine & PIDo & " " & vbNewLine & PV1o & " " & vbNewLine & ORCo & " " & vbNewLine & OBRo
+
+            'setting the type of message to be saved as in notepad
+            SaveFileDialog1.Filter = "Text files(*.txt)|*.txt"
+
+            'opening the save file dialog
+            SaveFileDialog1.ShowDialog()
+
+            adors1.Close()
+            adors2.Close()
+            adors3.Close()
+            adors4.Close()
+            adors(3).Value = 1    'setting the flag of the current patient whose flat file has been just generated to 1
+            adors.MoveNext()      'moves to next record
+
+        Loop
+
+        'closing the connections
+        adors.Close()
+        adocon.Close()
+
+    End Sub
+
+    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
+
+        'end button for closing of forms and going back to form1 with username and password entered in form1 previously been cleared
+        Me.Close()
+        Form2.Close()
+        Form1.TextBox1.Clear()
+        Form1.TextBox2.Clear()
+
+    End Sub
+
+    Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+
+        'Saving the repective flatfiles to different notepad file
+        Dim FileToSave As String = SaveFileDialog1.FileName
+        Dim objWriter As New System.IO.StreamWriter(FileToSave)
+        objWriter.Write(TextBox3.Text)
+        objWriter.Close()
+
+    End Sub
+
+End Class
