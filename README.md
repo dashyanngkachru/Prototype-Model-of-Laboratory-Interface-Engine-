@@ -1,4 +1,4 @@
-# Prototype-Model-of-Laboratory-Interface-Engine-
+# Prototype Model of Laboratory Interface Engine
 
 Implementing this interface engine will provide laboratory departments to transfer information about an order such as lab test.
 
